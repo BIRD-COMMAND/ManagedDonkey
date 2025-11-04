@@ -206,8 +206,63 @@ thread_local s_render_debug_globals* g_render_debug_globals = NULL;
 
 int32 type_list[] = { 0, 0, 0, 3, 0, 0, 0, 1, 0, 1, 2, 2, 0 };
 
+static c_render_debug_line_drawer lines_white, lines_white_2d;
+static c_render_debug_line_drawer lines_grey, lines_grey_2d;
+static c_render_debug_line_drawer lines_black, lines_black_2d;
+static c_render_debug_line_drawer lines_red, lines_red_2d;
+static c_render_debug_line_drawer lines_green, lines_green_2d;
+static c_render_debug_line_drawer lines_blue, lines_blue_2d;
+static c_render_debug_line_drawer lines_yellow, lines_yellow_2d;
+static c_render_debug_line_drawer lines_cyan, lines_cyan_2d;
+static c_render_debug_line_drawer lines_magenta, lines_magenta_2d;
+static c_render_debug_line_drawer lines_pink, lines_pink_2d;
+static c_render_debug_line_drawer lines_lightblue, lines_lightblue_2d;
+static c_render_debug_line_drawer lines_orange, lines_orange_2d;
+static c_render_debug_line_drawer lines_purple, lines_purple_2d;
+static c_render_debug_line_drawer lines_aqua, lines_aqua_2d;
+static c_render_debug_line_drawer lines_darkgreen, lines_darkgreen_2d;
+static c_render_debug_line_drawer lines_salmon, lines_salmon_2d;
+static c_render_debug_line_drawer lines_violet, lines_violet_2d;
+
 void __cdecl render_debug_initialize()
 {
+	// Create 3D line drawers
+	lines_white = c_render_debug_line_drawer(); 		lines_white.set_color(global_real_argb_white);
+	lines_grey = c_render_debug_line_drawer(); 			lines_grey.set_color(global_real_argb_grey);
+	lines_black = c_render_debug_line_drawer(); 		lines_black.set_color(global_real_argb_black);
+	lines_red = c_render_debug_line_drawer(); 			lines_red.set_color(global_real_argb_red);
+	lines_green = c_render_debug_line_drawer(); 		lines_green.set_color(global_real_argb_green);
+	lines_blue = c_render_debug_line_drawer(); 			lines_blue.set_color(global_real_argb_blue);
+	lines_yellow = c_render_debug_line_drawer(); 		lines_yellow.set_color(global_real_argb_yellow);
+	lines_cyan = c_render_debug_line_drawer(); 			lines_cyan.set_color(global_real_argb_cyan);
+	lines_magenta = c_render_debug_line_drawer(); 		lines_magenta.set_color(global_real_argb_magenta);
+	lines_pink = c_render_debug_line_drawer(); 			lines_pink.set_color(global_real_argb_pink);
+	lines_lightblue = c_render_debug_line_drawer();		lines_lightblue.set_color(global_real_argb_lightblue);
+	lines_orange = c_render_debug_line_drawer(); 		lines_orange.set_color(global_real_argb_orange);
+	lines_purple = c_render_debug_line_drawer(); 		lines_purple.set_color(global_real_argb_purple);
+	lines_aqua = c_render_debug_line_drawer(); 			lines_aqua.set_color(global_real_argb_aqua);
+	lines_darkgreen = c_render_debug_line_drawer();		lines_darkgreen.set_color(global_real_argb_darkgreen);
+	lines_salmon = c_render_debug_line_drawer(); 		lines_salmon.set_color(global_real_argb_salmon);
+	lines_violet = c_render_debug_line_drawer(); 		lines_violet.set_color(global_real_argb_violet);
+	// Create 2D line drawers
+	lines_white_2d = c_render_debug_line_drawer(); 		lines_white_2d.set_color(global_real_argb_white);
+	lines_grey_2d = c_render_debug_line_drawer(); 		lines_grey_2d.set_color(global_real_argb_grey);
+	lines_black_2d = c_render_debug_line_drawer(); 		lines_black_2d.set_color(global_real_argb_black);
+	lines_red_2d = c_render_debug_line_drawer(); 		lines_red_2d.set_color(global_real_argb_red);
+	lines_green_2d = c_render_debug_line_drawer(); 		lines_green_2d.set_color(global_real_argb_green);
+	lines_blue_2d = c_render_debug_line_drawer(); 		lines_blue_2d.set_color(global_real_argb_blue);
+	lines_yellow_2d = c_render_debug_line_drawer();		lines_yellow_2d.set_color(global_real_argb_yellow);
+	lines_cyan_2d = c_render_debug_line_drawer(); 		lines_cyan_2d.set_color(global_real_argb_cyan);
+	lines_magenta_2d = c_render_debug_line_drawer();	lines_magenta_2d.set_color(global_real_argb_magenta);
+	lines_pink_2d = c_render_debug_line_drawer(); 		lines_pink_2d.set_color(global_real_argb_pink);
+	lines_lightblue_2d = c_render_debug_line_drawer(); 	lines_lightblue_2d.set_color(global_real_argb_lightblue);
+	lines_orange_2d = c_render_debug_line_drawer(); 	lines_orange_2d.set_color(global_real_argb_orange);
+	lines_purple_2d = c_render_debug_line_drawer(); 	lines_purple_2d.set_color(global_real_argb_purple);
+	lines_aqua_2d = c_render_debug_line_drawer(); 		lines_aqua_2d.set_color(global_real_argb_aqua);
+	lines_darkgreen_2d = c_render_debug_line_drawer(); 	lines_darkgreen_2d.set_color(global_real_argb_darkgreen);
+	lines_salmon_2d = c_render_debug_line_drawer(); 	lines_salmon_2d.set_color(global_real_argb_salmon);
+	lines_violet_2d = c_render_debug_line_drawer(); 	lines_violet_2d.set_color(global_real_argb_violet);
+
 	g_render_debug_globals = &_render_debug_globals;
 	csmemset(g_render_debug_globals, 0, sizeof(s_render_debug_globals));
 
@@ -415,7 +470,10 @@ void __cdecl render_debug_visibility_render()
 
 void __cdecl render_debug_clients(int32 user_index)
 {
-	geometry_cache_debug_render();
+	if (g_render_debug_globals->drawing_cached_geometry)
+	{
+		geometry_cache_debug_render();
+	}
 	texture_cache_debug_render();
 	sound_cache_debug_render();
 	file_activity_debug_render();
@@ -574,14 +632,29 @@ void __cdecl render_debug_point2d(bool immediate, const real_plane3d* plane, int
 
 void __cdecl render_debug_line2d(const real_point2d* p0, const real_point2d* p1, const real_argb_color* color)
 {
-	if (render_debug_draw_immediately(color))
-	{
-		rasterizer_debug_line2d(p0, p1, color, color);
-	}
-	else
-	{
-		render_debug_add_cache_entry(_render_debug_type_line2d, p0, p1, color, color);
-	}
+	// if (render_debug_draw_immediately(color)) { rasterizer_debug_line2d(p0, p1, color, color); }
+	// else { render_debug_add_cache_entry(_render_debug_type_line2d, p0, p1, color, color); }
+
+	// Send the line to the appropriate color drawer
+	     if (color == global_real_argb_white	)	{ lines_white_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_grey		)	{ lines_grey_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_black	)	{ lines_black_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_red		)	{ lines_red_2d.			add_line_2d(p0, p1); }
+	else if (color == global_real_argb_green	)	{ lines_green_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_blue		)	{ lines_blue_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_yellow	)	{ lines_yellow_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_cyan		)	{ lines_cyan_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_magenta	)	{ lines_magenta_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_pink		)	{ lines_pink_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_lightblue)	{ lines_lightblue_2d.	add_line_2d(p0, p1); }
+	else if (color == global_real_argb_orange	)	{ lines_orange_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_purple	)	{ lines_purple_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_aqua		)	{ lines_aqua_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_darkgreen)	{ lines_darkgreen_2d.	add_line_2d(p0, p1); }
+	else if (color == global_real_argb_salmon	)	{ lines_salmon_2d.		add_line_2d(p0, p1); }
+	else if (color == global_real_argb_violet	)	{ lines_violet_2d.		add_line_2d(p0, p1); }
+	else { lines_green_2d.add_line_2d(p0, p1); }
+
 }
 
 void __cdecl render_debug_line2d(bool immediate, const real_plane3d* plane, int16 projection_axis, bool projection_sign, const real_point2d* p0, const real_point2d* p1, const real_argb_color* color, real32 offset)
@@ -724,14 +797,29 @@ void __cdecl render_debug_line(bool immediate, const real_point3d* point0, const
 	ASSERT(point1);
 	ASSERT(color);
 
-	if (render_debug_draw_immediately(color))
-	{
-		rasterizer_debug_line(point0, point1, color, color);
-	}
-	else
-	{
-		render_debug_add_cache_entry(_render_debug_type_line, point0, point1, color, color);
-	}
+	// if (render_debug_draw_immediately(color)) { rasterizer_debug_line(point0, point1, color, color); }
+	// else { render_debug_add_cache_entry(_render_debug_type_line, point0, point1, color, color); }
+
+	// Send the line to the appropriate color drawer
+	     if (color == global_real_argb_white	) { lines_white.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_grey		) { lines_grey.			add_line_3d(point0, point1); }
+	else if (color == global_real_argb_black	) { lines_black.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_red		) { lines_red.			add_line_3d(point0, point1); }
+	else if (color == global_real_argb_green	) { lines_green.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_blue		) { lines_blue.			add_line_3d(point0, point1); }
+	else if (color == global_real_argb_yellow	) { lines_yellow.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_cyan		) { lines_cyan.			add_line_3d(point0, point1); }
+	else if (color == global_real_argb_magenta	) { lines_magenta.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_pink		) { lines_pink.			add_line_3d(point0, point1); }
+	else if (color == global_real_argb_lightblue) { lines_lightblue.	add_line_3d(point0, point1); }
+	else if (color == global_real_argb_orange	) { lines_orange.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_purple	) { lines_purple.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_aqua		) { lines_aqua.			add_line_3d(point0, point1); }
+	else if (color == global_real_argb_darkgreen) { lines_darkgreen.	add_line_3d(point0, point1); }
+	else if (color == global_real_argb_salmon	) { lines_salmon.		add_line_3d(point0, point1); }
+	else if (color == global_real_argb_violet	) { lines_violet.		add_line_3d(point0, point1); }
+	else { lines_green.add_line_3d(point0, point1); }
+
 }
 
 void __cdecl render_debug_line_shaded(bool immediate, const real_point3d* point0, const real_point3d* point1, const real_argb_color* color0, const real_argb_color* color1)
@@ -1822,7 +1910,7 @@ c_render_debug_line_drawer::c_render_debug_line_drawer()
 	m_oo_screen_width = 1.0f / rectangle2d_width(&screen_bounds);
 	m_oo_screen_height = 1.0f / rectangle2d_height(&screen_bounds);
 	m_internal_queue_vertex_count = 0;
-	m_line_type = _line_type_none;
+	m_line_type = _line_type_3d;
 	c_render_debug_line_drawer::set_color(global_real_argb_white);
 }
 
@@ -1833,13 +1921,12 @@ c_render_debug_line_drawer::~c_render_debug_line_drawer()
 
 void c_render_debug_line_drawer::flush()
 {
-	bool can_draw_immediately = render_debug_draw_immediately(&m_color_argb);
-	if (can_draw_immediately)
+	// bool can_draw_immediately = render_debug_draw_immediately(&m_color_argb);
+	// if (can_draw_immediately) {
+	if (m_internal_queue_vertex_count > 0)
 	{
-		if (m_internal_queue_vertex_count > 0)
+		switch (m_line_type)
 		{
-			switch (m_line_type)
-			{
 			case _line_type_2d:
 			{
 				c_rasterizer::draw_debug_line_list2d_explicit((rasterizer_vertex_debug*)m_internal_queue, m_internal_queue_vertex_count / 2);
@@ -1850,15 +1937,12 @@ void c_render_debug_line_drawer::flush()
 				c_rasterizer::draw_debug_line_list_explicit((rasterizer_vertex_debug*)m_internal_queue, m_internal_queue_vertex_count / 2);
 			}
 			break;
-			}
 		}
 	}
-	else
-	{
-		event(_event_error, "can't use debug_line_drawer w/o immediate debug drawing");
-	}
+	//else { event(_event_error, "can't use debug_line_drawer w/o immediate debug drawing"); }
 
 	m_internal_queue_vertex_count = 0;
+	// }
 }
 
 void c_render_debug_line_drawer::set_color(const real_argb_color* color)
