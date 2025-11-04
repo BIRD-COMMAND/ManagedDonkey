@@ -23,12 +23,41 @@
 // Modifier Table
 // 
 // Index, Shift,  Control, Alt
-// 0,     No,     No,      No
-// 1,     Yes,    No,      No
-// 2,     No,     Yes,     No
-// 3,     Ignore, No,      Yes
-// 4,     Yes,    Yes,     Yes
-// 5,     No,     Yes,     Yes
+// 0,     No,     No,      No		// NOTHING
+// 1,     Yes,    No,      No		// SHIFT
+// 2,     No,     Yes,     No		// CTRL
+// 3,     Ignore, No,      Yes		// ALT
+// 4,     Yes,    Yes,     Yes		// CTRL+ALT+SHIFT
+// 5,     No,     Yes,     Yes		// CTRL+ALT
+//
+// Generate summary comments for debug keys using regex
+// 
+// step 1
+// find `\.name = "([^"]+)",\n\s*\.key_code = ([\w\d]+),\n\s*\.modifier = (\d),\n(.*\n.*\n.*\n.*\n.*\n\s*\},)`
+// replace `.name = "$1",\n\t\t.key_code = $2,\n\t\t.modifier = $3,\n$4 // "$1": mod$3 + $2`
+// 
+// step 2.
+// find and replace each `mod# + `
+// with the entry on the next line
+//
+// mod0 + 
+// "" <- empty string, nothing
+// 
+// mod1 + 
+// SHIFT+
+// 
+// mod2 + 
+// CTRL+
+// 
+// mod3 + 
+// ALT+
+// 
+// mod4 + 
+// CTRL+ALT+SHIFT+
+// 
+// mod5 + 
+// CTRL+ALT+
+//
 
 // ai debug
 bool breakpoint = false;
@@ -44,7 +73,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = true,
 		.variable = NULL
-	},
+	}, // "Force Respawn": ALT+8
 	{
 		.name = "Select This Actor",
 		.key_code = _key_f1,
@@ -54,7 +83,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Select This Actor": F1
 	{
 		.name = "Select Prev Encounter",
 		.key_code = _key_f2,
@@ -64,7 +93,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Select Prev Encounter": F2
 	{
 		.name = "Select Next Encounter",
 		.key_code = _key_f3,
@@ -74,7 +103,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Select Next Encounter": F3
 	{
 		.name = "Select Next Actor",
 		.key_code = _key_f4,
@@ -84,7 +113,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Select Next Actor": F4
 	{
 		.name = "Select Prev Actor",
 		.key_code = _key_f4,
@@ -94,7 +123,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Select Prev Actor": SHIFT+F4
 	{
 		.name = "Show Actor Spray",
 		.key_code = _key_f5,
@@ -104,7 +133,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Show Actor Spray": F5
 	{
 		.name = "Erase All Actors",
 		.key_code = _key_f6,
@@ -114,7 +143,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Erase All Actors": F6
 	{
 		.name = "Rotate Units",
 		.key_code = _key_backslash,
@@ -124,7 +153,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Rotate Units": CTRL+BACKSLASH
 	{
 		.name = "Rotate All Units",
 		.key_code = _key_right_bracket,
@@ -134,7 +163,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Rotate All Units": CTRL+RIGHT_BRACKET
 	{
 		.name = "Ninja Rope",
 		.key_code = _key_left_bracket,
@@ -144,7 +173,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Ninja Rope": LEFT_BRACKET
 	{
 		.name = "Breakpoint",
 		.key_code = _key_b,
@@ -154,7 +183,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = &breakpoint
-	},
+	}, // "Breakpoint": B
 	{
 		.name = "Play Animation",
 		.key_code = _key_k,
@@ -164,7 +193,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Play Animation": K
 	{
 		.name = "Profile Summary",
 		.key_code = _key_f10,
@@ -174,7 +203,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL // $TODO
-	},
+	}, // "Profile Summary": F10
 	{
 		.name = "Profile Summary Off",
 		.key_code = _key_f10,
@@ -184,7 +213,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Summary Off": CTRL+F10
 	{
 		.name = "Profile Off",
 		.key_code = _key_f7,
@@ -194,7 +223,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Off": CTRL+F7
 	{
 		.name = "Profile Next Thread",
 		.key_code = _key_f7,
@@ -204,7 +233,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Next Thread": F7
 	{
 		.name = "Profile Prev Thread",
 		.key_code = _key_f7,
@@ -214,7 +243,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Prev Thread": SHIFT+F7
 	{
 		.name = "Profile Next Attrib",
 		.key_code = _key_f8,
@@ -224,7 +253,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Next Attrib": F8
 	{
 		.name = "Profile Prev Attrib",
 		.key_code = _key_f8,
@@ -234,7 +263,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Prev Attrib": SHIFT+F8
 	{
 		.name = "Profile Next Sort",
 		.key_code = _key_f9,
@@ -244,7 +273,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Next Sort": F9
 	{
 		.name = "Profile Prev Sort",
 		.key_code = _key_f9,
@@ -254,7 +283,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Prev Sort": SHIFT+F9
 	{
 		.name = "Profile Disp Type",
 		.key_code = _key_f9,
@@ -264,7 +293,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Disp Type": CTRL+F9
 	{
 		.name = "Profile Dump Frame",
 		.key_code = _key_f11,
@@ -274,7 +303,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "Profile Dump Frame": F11
 	{
 		.name = "Input debug",
 		.key_code = _key_i,
@@ -284,7 +313,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = true,
 		.variable = NULL
-	},
+	}, // "Input debug": SHIFT+I
 	{
 		.name = "Weapon Debug",
 		.key_code = _key_w,
@@ -294,7 +323,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = true,
 		.toggle_variable = true,
 		.variable = NULL
-	},
+	}, // SHIFT+_key_w: "Weapon Debug"
 	//{
 	//	.name = "4x3 view in widescreen",
 	//	.key_code = _key_f11,
@@ -314,7 +343,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "exit game": SHIFT+ESCAPE
 	{
 		.name = "toggle mouse focus",
 		.key_code = _key_m,
@@ -324,7 +353,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "toggle mouse focus": SHIFT+M
 	{
 		.name = "clear screen",
 		.key_code = _key_return,
@@ -334,7 +363,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = true,
 		.variable = NULL
-	},
+	}, // "clear screen": SHIFT+RETURN
 	{
 		.name = "deathless player",
 		.key_code = _key_c,
@@ -344,7 +373,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = true,
 		.variable = &cheat.deathless_player
-	},
+	}, // "deathless player": CTRL+C
 	{
 		.name = "infinite ammo",
 		.key_code = _key_c,
@@ -354,7 +383,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = true,
 		.variable = &cheat.infinite_ammo
-	},
+	}, // "infinite ammo": ALT+C
 	{
 		.name = "display framerate",
 		.key_code = _key_f,
@@ -364,7 +393,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = true,
 		.variable = &display_framerate
-	},
+	}, // "display framerate": CTRL+F
 	{
 		.name = "infinite framerate",
 		.key_code = _key_f,
@@ -374,7 +403,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = true,
 		.variable = &render_debug_infinite_framerate
-	},
+	}, // ALT+_key_f: "infinite framerate"
 	//{
 	//	.name = "render model vertex",
 	//	.key_code = _key_r,
@@ -404,7 +433,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "save camera": CTRL+J
 	{
 		.name = "load camera",
 		.key_code = _key_k,
@@ -414,7 +443,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "load camera": CTRL+K
 	{
 		.name = "teleport to Camera",
 		.key_code = _key_l,
@@ -424,7 +453,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // CTRL+_key_l: "teleport to Camera"
 	//{
 	//	.name = "texture cache usage",
 	//	.key_code = _key_6,
@@ -514,7 +543,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "toggle pause": PAUSE
 	{
 		.name = "print screen",
 		.key_code = _key_print_screen,
@@ -524,7 +553,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "print screen": PRINT_SCREEN
 	{
 		.name = "game speed minor +",
 		.key_code = _key_equal,
@@ -534,7 +563,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed minor +": EQUAL
 	{
 		.name = "game speed minor -",
 		.key_code = _key_dash,
@@ -544,7 +573,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed minor -": DASH
 	{
 		.name = "game speed major +",
 		.key_code = _key_equal,
@@ -554,7 +583,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed major +": SHIFT+EQUAL
 	{
 		.name = "game speed major -",
 		.key_code = _key_dash,
@@ -564,7 +593,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed major -": SHIFT+DASH
 	{
 		.name = "game speed minor +",
 		.key_code = _keypad_add,
@@ -574,7 +603,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed minor +": PAD_ADD
 	{
 		.name = "game speed minor -",
 		.key_code = _keypad_subtract,
@@ -584,7 +613,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed minor -": PAD_SUBTRACT
 	{
 		.name = "game speed major +",
 		.key_code = _keypad_add,
@@ -594,7 +623,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed major +": SHIFT+PAD_ADD
 	{
 		.name = "game speed major -",
 		.key_code = _keypad_subtract,
@@ -604,7 +633,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "game speed major -": SHIFT+PAD_SUBTRACT
 	{
 		.name = "dump asserts",
 		.key_code = _key_a,
@@ -614,7 +643,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "dump asserts": CTRL+A
 	{
 		.name = "time stats display",
 		.key_code = _key_t,
@@ -624,7 +653,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "time stats display": CTRL+T
 	{
 		.name = "time stats pause",
 		.key_code = _key_t,
@@ -634,7 +663,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "time stats pause": ALT+T
 	{
 		.name = "toggle controls method",
 		.key_code = _key_c,
@@ -644,7 +673,7 @@ debug_key global_debug_key_list[]
 		.allow_in_editor = false,
 		.toggle_variable = false,
 		.variable = NULL
-	},
+	}, // "toggle controls method": CTRL+ALT+C
 	{
 		.name = NULL,
 		.key_code = _key_not_a_key,
